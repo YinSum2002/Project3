@@ -4,9 +4,26 @@ from Dot import Dot
 
 
 class Explosion:
+    def __init__(self, canvas, max_radius = 80, color = "rainbow"):
+        self.dots = 15
+        self.dotlist = []
+        self.__active = False
+        self.canvas = canvas
+        self.max_radius = max_radius
+        self.color = color
 
-    #### to complete
+    def activate(self, x, y):
+        self.x = x #I suspect x and y might actually turn out to be something different
+        self.y = y
+        self.r = 0
+        self.__active = True
 
+    @staticmethod
+    def add_explosion(canvas,booms,x,y):
+        pass
+    def __next__(self):
+        if self.__active == True:
+            self.r += 1
 
 
 
