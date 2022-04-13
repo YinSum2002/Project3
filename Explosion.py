@@ -13,17 +13,48 @@ class Explosion:
         self.color = color
 
     def activate(self, x, y):
-        self.x = x #I suspect x and y might actually turn out to be something different
+        self.x = x
         self.y = y
         self.r = 0
         self.__active = True
 
-    @staticmethod
-    def add_explosion(canvas,booms,x,y):
-        pass
-    def __next__(self):
+    def is_active(self):
+        return self.__active
+
+    def next(self):
         if self.__active == True:
-            self.r += 1
+            if self.r < self.max_radius:
+                self.r += 1
+
+                for i in range(self.dots):
+                    d = random.randint(0,359)
+                    theta = math.pi * d/180
+                    x = self.x + self.r * math.cos(theta)
+                    y = self.y + self.r * math.sin(theta)
+                    dot = Dot(self.canvas, x, y, self.color)
+                    self.dotlist.append(dot)
+            else:
+                self.deactivate()
+
+    def deactivate(self):
+        self.__active = False
+        for dot in self.dotlist:
+            self.canvas.delete(dot.id)
+        self.dotlist = []
+        #self.new_list = [] #HERE!
+        #for i in self.epl_list: #HERE!
+            #if self.__active == True:  #HERE!
+                #self.new_list.append(i)  #HERE!
+            #self.dot_list.pop(i)  #HERE!
+
+    @staticmethod
+    def add_explosion(canvas, epl_list, x, y, max_rad = 80, color = "rainbow"):
+        explosion = Explosion(canvas, max_rad, color)
+        explosion.activate(x, y)
+        epl_list.append(explosion)
+        #for i in epl_list:
+            #if i.__active == False:
+                #i.epl_list.pop()
 
 
 

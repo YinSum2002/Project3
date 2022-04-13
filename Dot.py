@@ -18,7 +18,7 @@ class Dot:
                         self.color = random.choice(items)
                 else:
                         self.color = color
-                canvas.create_oval(self.x-1,self.y-1,self.x+1,self.y+1, fill = self.color)
+                self.id = canvas.create_oval(self.x-1,self.y-1,self.x+1,self.y+1, fill = self.color, outline = self.color)
                 if display == True:
                         print(self.x, self.y, self.color)
 
