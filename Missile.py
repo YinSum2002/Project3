@@ -28,7 +28,7 @@ class Missile:
         if self.__active == True:
             self.canvas.move(self.id, 0, -5)
             self.y -= 5
-            if self.y - self.height == self.ceiling_height:
+            if self.y - self.height <= self.ceiling_height:
                 self.deactivate()
 
 
@@ -36,10 +36,8 @@ class Missile:
     def add_missile(canvas, missiles, x, y, ceiling, inc = 5, color="orange"):
         missile = Missile(canvas, ceiling, inc, color)
         missile.activate(x, y)
-        for i in range(len(missiles)-1): #use while loop instead, check for index
-            while missiles[i].is_active() == False:
-                missiles.pop(i)
         missiles.append(missile)
+
        #### to complete
 
 
@@ -87,6 +85,7 @@ def main():
                 inc = random.randint(2, 7)
                 items = ["red", "green", "blue", "yellow", "white", "orange", "purple"]
                 color = random.choice(items)
+                print(ceiling)
                 Missile.add_missile(canvas, missiles, x, y, ceiling, inc, color)
             t += 1
 

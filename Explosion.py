@@ -51,9 +51,10 @@ class Explosion:
     def add_explosion(canvas, epl_list, x, y, max_rad = 80, color = "rainbow"):
         explosion = Explosion(canvas, max_rad, color)
         explosion.activate(x, y)
-        for i in range(len(epl_list)-1): #use while loop instead, check for index
-            while epl_list[i].is_active() == False:
-                epl_list.pop(i)
+
+        #for i in range(len(epl_list)-1): #use while loop instead, check for index
+            #while epl_list[i].is_active() == False:
+                #epl_list.pop(i)
         epl_list.append(explosion)
         #for i in epl_list:
             #if i.__active == False:
