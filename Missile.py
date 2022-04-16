@@ -32,6 +32,7 @@ class Missile:
                 self.deactivate()
 
 
+
     @staticmethod
     def add_missile(canvas, missiles, x, y, ceiling, inc = 5, color="orange"):
         missile = Missile(canvas, ceiling, inc, color)

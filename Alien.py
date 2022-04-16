@@ -3,8 +3,52 @@ import math
 import time, random
 
 class Alien:
-    ### to complete
-        
+    def __init__(self, canvas, inc = 4, color = "yellow", width = 50, height = 50, pval = 1):
+        self.canvas = canvas
+        self.inc = inc
+        self.color = color
+        self.width = width
+        self.height = height
+        self.pval = pval
+        self._active = False
+
+    def activate(self):
+        x = random.randint(self.width//2, self.canvas.winfo_width()-self.width//2)
+        self.x = x
+        self.y = 0
+        left = x - self.width // 2
+        right = x + self.width // 2
+        bottom = self.y + self.height // 2
+        top = self.y  - self.height // 2
+        self._active = True
+        self.id = self.canvas.create_rectangle(left, bottom, right, top, fill = self.color, outline = self.color)
+
+    def is_active(self):
+        return self._active
+
+    def deactivate(self):
+        self._active = False
+        self.canvas.delete(self.id)
+
+    def next(self):
+        if self._active == True:
+            self.canvas.move(self.id, 0, self.inc)
+            self.y += self.inc
+            if self.y >= self.canvas.winfo_height():
+                self.deactivate()
+
+    def is_shot(self, x0, y0):
+        top = self.y - self.height//2
+        bottom = self.y + self.height//2
+        left = self.x - self.width//2
+        right = self.x + self.width//2
+        return left <= x0 and x0 <= right and top <= y0 and y0 <= bottom
+
+
+
+
+
+
 ################################################################
 ################################################################
 
@@ -13,10 +57,16 @@ class Alien_red(Alien):
         self.image=PhotoImage(file="alien_red.png")  # keep a reference (avoid garbage collector)
         width=self.image.width()
         height=self.image.height()
-        # contstructor to complete
 
+        # contstructor to complete
+        super().__init__(c, inc = 4, color="red", width = self.image.width(), height = self.image.height(), pval = 2)
     # to complete
-        
+    def activate(self):
+        x = random.randint(self.width // 2, self.canvas.winfo_width() - self.width // 2)
+        self.x = x
+        self.y = 0
+        self._active = True
+        self.id = self.canvas.create_image(x,self.y,anchor = CENTER, image = self.image)
 
 
 ###############################################################
@@ -24,7 +74,7 @@ class Alien_red(Alien):
 
 class Alien_green(Alien_red):
 
-    # to complete
+    pass# to complete
 
 
 ###############################################################
@@ -35,7 +85,7 @@ class Alien_green(Alien_red):
 class Alien_blue(Alien_red):
 
 
-    # to complete
+    pass# to complete
 
 
 
@@ -67,8 +117,8 @@ def main():
         
 
         #Initialize alien
-        alien=Alien(canvas)
-        #alien=Alien_red(canvas)
+        #alien=Alien(canvas)
+        alien=Alien_red(canvas)
         #alien=Alien_green(canvas)
         #alien=Alien_blue(canvas)
 
