@@ -73,9 +73,20 @@ class Alien_red(Alien):
 ###############################################################
 
 class Alien_green(Alien_red):
+    def __init__(self, c):
+        self.image = PhotoImage(file="alien_green.png")  # keep a reference (avoid garbage collector)
+        width = self.image.width()
+        height = self.image.height()
+        Alien.__init__(self, c, inc=4, color = "green", pval = 4)
 
-    pass# to complete
-
+    def next(self):
+        if self._active == True:
+            self.canvas.move(self.id, random.randint(-5,5), self.inc)
+            self.y += self.inc
+            self.x += random.randint(-5,5)
+            #print(self.x)
+            if self.y >= self.canvas.winfo_height():
+                self.deactivate()
 
 ###############################################################
 ###############################################################
@@ -83,9 +94,32 @@ class Alien_green(Alien_red):
 
 
 class Alien_blue(Alien_red):
+    def __init__(self, c, d = random.randint(200, 340)):
+        self.d = d
+        self.image = PhotoImage(file="alien_blue.png")  # keep a reference (avoid garbage collector)
+        width = self.image.width()
+        height = self.image.height()
+        Alien.__init__(self, c, inc=4, color = "blue", pval = 3)
+
+        
+    def next(self):
+        theta = math.pi * self.d / 180
+        x = self.inc * math.cos(theta)
+        y = -self.inc * math.sin(theta)
+        if self.x <= 0 or self.x >= self.canvas.winfo_width():
+            print(self.d)
+            self.d = self.d + (270 - self.d) * 2
+        #if self.x >= self.canvas.winfo_width():
+            #self.d = self.d + 270 - self.d
 
 
-    pass# to complete
+        if self._active == True:
+            self.canvas.move(self.id, x, y)
+            self.y += y
+            self.x += x
+            if self.y >= self.canvas.winfo_height():
+                self.deactivate()
+
 
 
 
@@ -118,9 +152,9 @@ def main():
 
         #Initialize alien
         #alien=Alien(canvas)
-        alien=Alien_red(canvas)
+        #alien=Alien_red(canvas)
         #alien=Alien_green(canvas)
-        #alien=Alien_blue(canvas)
+        alien=Alien_blue(canvas)
 
         alien.activate()
         
