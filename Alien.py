@@ -94,8 +94,8 @@ class Alien_green(Alien_red):
 
 
 class Alien_blue(Alien_red):
-    def __init__(self, c, d = random.randint(200, 340)):
-        self.d = d
+    def __init__(self, c):
+        self.d = math.pi * random.randint(200, 340)/180
         self.image = PhotoImage(file="alien_blue.png")  # keep a reference (avoid garbage collector)
         width = self.image.width()
         height = self.image.height()
@@ -103,17 +103,14 @@ class Alien_blue(Alien_red):
 
         
     def next(self):
-        theta = math.pi * self.d / 180
-        x = self.inc * math.cos(theta)
-        y = -self.inc * math.sin(theta)
-        if self.x <= 0 or self.x >= self.canvas.winfo_width():
-            print(self.d)
-            self.d = self.d + (270 - self.d) * 2
-        #if self.x >= self.canvas.winfo_width():
-            #self.d = self.d + 270 - self.d
-
-
         if self._active == True:
+            x = self.inc * math.cos(self.d)
+            y = -self.inc * math.sin(self.d)
+            print(self.d, self.x, self.canvas.winfo_width(), self.width)
+            if self.x + x <= self.width//2:
+                self.d = math.pi - self.d
+            elif self.x + x >= self.canvas.winfo_width() - self.width//2: #by using self.x + x,
+                self.d = -math.pi - self.d
             self.canvas.move(self.id, x, y)
             self.y += y
             self.x += x

@@ -1,9 +1,41 @@
 from tkinter import *
 
 class SpaceShip:
+    def __init__(self, canvas):
+        self.canvas = canvas
+        self.image = PhotoImage(file="ship.png")  # keep a reference (avoid garbage collector)
+        self.width = self.image.width()
+        self.height = self.image.height()
+        self.__active = False
+
+    def activate(self):
+        self.x = self.canvas.winfo_width()//2
+        self.y = self.canvas.winfo_height()
+        self.__active = True
+        self.id = self.canvas.create_image(self.x, self.y, anchor = "s", image = self.image)
 
 
- 
+    def deactivate(self):
+        self.__active = False
+        self.canvas.delete(self.id)
+
+    def shift_left(self):
+        if self.__active == True:
+            new_pos = self.x - 15
+            if new_pos < self.width//2:
+                new_pos = self.width//2
+            self.canvas.move(self.id, new_pos - self.x, 0)
+            self.x = new_pos
+            print("Left", self.x)
+
+    def shift_right(self):
+        if self.__active == True:
+            new_pos = self.x + 15
+            if new_pos > self.canvas.winfo_width() - self.width//2:
+                new_pos = self.canvas.winfo_width() - self.width//2
+            self.canvas.move(self.id, new_pos - self.x, 0)
+            self.x = new_pos
+            print("Right", self.x)
 
     
 def main():

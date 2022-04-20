@@ -35,6 +35,11 @@ class Missile:
 
     @staticmethod
     def add_missile(canvas, missiles, x, y, ceiling, inc = 5, color="orange"):
+        i = len(missiles) - 1
+        while i >= 0:
+            if missiles[i].is_active() == False:
+                del missiles[i]
+            i -= 1
         missile = Missile(canvas, ceiling, inc, color)
         missile.activate(x, y)
         missiles.append(missile)

@@ -41,24 +41,22 @@ class Explosion:
         for dot in self.dotlist:
             self.canvas.delete(dot.id)
         self.dotlist = []
-        #self.new_list = [] #HERE!
-        #for i in self.epl_list: #HERE!
-            #if self.__active == True:  #HERE!
-                #self.new_list.append(i)  #HERE!
-            #self.dot_list.pop(i)  #HERE!
 
     @staticmethod
     def add_explosion(canvas, epl_list, x, y, max_rad = 80, color = "rainbow"):
+        i = len(epl_list) - 1
+        while i >= 0:
+            if epl_list[i].is_active() == False:
+                del epl_list[i]
+            i -= 1
+
+
         explosion = Explosion(canvas, max_rad, color)
         explosion.activate(x, y)
 
-        #for i in range(len(epl_list)-1): #use while loop instead, check for index
-            #while epl_list[i].is_active() == False:
-                #epl_list.pop(i)
+
+
         epl_list.append(explosion)
-        #for i in epl_list:
-            #if i.__active == False:
-                #i.epl_list.pop()
 
 
 
