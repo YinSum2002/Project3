@@ -14,8 +14,26 @@ def stop_game():
     global game_over
     game_over=True
     
-def shoot 
+def shoot(canvas, a_list, e_list, counter, x, y):
+        for a in a_list:
+                if a.is_active() == True:
+                        if a.is_shot(x,y) == True:
+                                Counter.increment(a.pval) #main function, call Counter class
+                                a.deactivate()
+        #write seperate function for if miss EVERYONE
+
+        for e in e_list:
+
+                if a.is__shot == False:
+                        count -= 3
+
+
     ####### to complete
+class Alien:
+
+        @staticmethod
+        def add_Alien():
+
 
 
 
