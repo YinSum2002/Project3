@@ -44,6 +44,17 @@ class Alien:
         right = self.x + self.width//2
         return left <= x0 and x0 <= right and top <= y0 and y0 <= bottom
 
+    @staticmethod
+    def add_alien(canvas, a_list):
+        i = random.randint(1, 3)
+        if i == 1:
+            alien = Alien_red(canvas)
+        elif i == 2:
+            alien = Alien_blue(canvas)
+        else:
+            alien = Alien_green(canvas)
+        a_list.append(alien)
+        alien.activate()
 
 
 
@@ -84,7 +95,6 @@ class Alien_green(Alien_red):
             self.canvas.move(self.id, random.randint(-5,5), self.inc)
             self.y += self.inc
             self.x += random.randint(-5,5)
-            #print(self.x)
             if self.y >= self.canvas.winfo_height():
                 self.deactivate()
 
@@ -106,7 +116,6 @@ class Alien_blue(Alien_red):
         if self._active == True:
             x = self.inc * math.cos(self.d)
             y = -self.inc * math.sin(self.d)
-            print(self.d, self.x, self.canvas.winfo_width(), self.width)
             if self.x + x <= self.width//2:
                 self.d = math.pi - self.d
             elif self.x + x >= self.canvas.winfo_width() - self.width//2: #by using self.x + x,
@@ -150,8 +159,8 @@ def main():
         #Initialize alien
         #alien=Alien(canvas)
         #alien=Alien_red(canvas)
-        #alien=Alien_green(canvas)
-        alien=Alien_blue(canvas)
+        alien=Alien_green(canvas)
+        #alien=Alien_blue(canvas)
 
         alien.activate()
         

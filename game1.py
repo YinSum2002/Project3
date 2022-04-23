@@ -15,28 +15,21 @@ def stop_game():
     game_over=True
     
 def shoot(canvas, a_list, e_list, counter, x, y):
+        hit = 0
         for a in a_list:
                 if a.is_active() == True:
                         if a.is_shot(x,y) == True:
-                                Counter.increment(a.pval) #main function, call Counter class
+
+                                counter.increment(a.pval) #main function, call Counter class
                                 a.deactivate()
+                                hit += 1
+                                Explosion.add_explosion(canvas, e_list, x, y, 30, color = a.color)
+
         #write seperate function for if miss EVERYONE
-
-        for e in e_list:
-
-                if a.is__shot == False:
-                        count -= 3
-
-
-    ####### to complete
-class Alien:
-
-        @staticmethod
-        def add_Alien():
-
-
-
-
+        if hit == 0:
+                print(f'Miss, {x}, {y}')
+                Explosion.add_explosion(canvas, e_list, x, y, 30, color= "white")
+                counter.increment(-3) #capital or lower case C?
 
 ################
     
@@ -72,15 +65,21 @@ def main():
         ####### start simulation
         ############################################
 
+        t = 0
+        while not game_over and amunition.val > 0:
+                if t % 50 == 0:
+                        Alien.add_alien(canvas, aliens)
+                t += 1
+                for a in aliens:
+                        a.next()  # next time step
 
+                for b in booms:
+                        b.next()
+                root.update()  # update the graphic (redraw)
+                time.sleep(0.01)
 
-        #To complete (time sleep is 0.01s)
+        canvas.create_text(w//2, h//2, text="GAME OVER", fill="orange", font=("Courier", 25))
 
-
-
-
-          
-           
         root.mainloop() # wait until the window is closed
         
 
