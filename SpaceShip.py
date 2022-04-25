@@ -18,6 +18,9 @@ class SpaceShip:
         self.__active = False
         self.canvas.delete(self.id)
 
+    def is_active(self):
+        return self.__active
+
     def shift_left(self):
         if self.__active == True:
             new_pos = self.x - 15

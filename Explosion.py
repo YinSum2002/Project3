@@ -50,13 +50,10 @@ class Explosion:
                 del epl_list[i]
             i -= 1
 
-
         explosion = Explosion(canvas, max_rad, color)
         explosion.activate(x, y)
-
-
-
         epl_list.append(explosion)
+        return explosion
 
 
 

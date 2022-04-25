@@ -16,6 +16,11 @@ def stop_game():
     global game_over
     game_over=True
     
+def shoot(canvas, missiles, ship):
+    if ship.is_active():
+        Missile.add_missile(canvas, missiles, ship.x, canvas.winfo_height() - ship.height, 0, inc=5, color="orange")
+
+
 
     
 def main():
@@ -42,10 +47,11 @@ def main():
 
     root.bind("<Left>", lambda e: ship.shift_left())
     root.bind("<Right>", lambda e: ship.shift_right())
-    root.bind("<Up>", lambda e: Missile.add_missile(canvas, missiles, ship.x, h-ship.height, 0, inc = 5, color = "orange"))
+    root.bind("<Up>", lambda e: shoot(canvas, missiles, ship))
     root.bind("<Escape>", lambda e: stop_game())
 
     t = 0
+    blow = None
     while not game_over and amunition.val>=0: #see what you can do about getting down to 0
         if t % 100 == 0:
             Alien.add_alien(canvas, aliens)
@@ -58,29 +64,32 @@ def main():
 
         for a in aliens:
             a.next()
-            for m in missiles:
-                if a.is_shot(m.x,m.y): # and a.is_active == True:
-                    amunition.increment(a.pval)  # main function, call Counter class
-                    Explosion.add_explosion(canvas, explosions, a.x, a.y, 30, color=a.color)
-                    a.deactivate()
-                    m.deactivate()
-                    break
+            if a.is_active():
+                for m in missiles:
+                    if a.is_shot(m.x,m.y): # and a.is_active == True:
+                        amunition.increment(a.pval)  # main function, call Counter class
+                        Explosion.add_explosion(canvas, explosions, a.x, a.y, 30, color=a.color)
+                        a.deactivate()
+                        m.deactivate()
+                        break
 
-            if ship.is_shot(a.x, a.y):
-                Explosion.add_explosion(canvas, explosions, ship.x, ship.y, 50, color="rainbow")
-                amunition.increment(-10)
-                ship.deactivate()
-                a.deactivate()
-        t += 1
+                if ship.is_active() and ship.is_shot(a.x, a.y):
+                    blow = Explosion.add_explosion(canvas, explosions, ship.x, ship.y, 50, color="rainbow")
+                    amunition.increment(-10)
+                    ship.deactivate()
+                    a.deactivate()
+
+        if blow and blow.is_active() == False:
+            blow = None
+            ship.activate()
+
         root.update()  # update the graphic (redraw)
         time.sleep(0.01)  # wait 0.01 second (simulation)
         #### to complete
 
+    canvas.create_text(w // 2, h // 2, text="GAME OVER", fill="orange", font=("Courier", 25))
 
-
-
-
-
+    root.mainloop()
 
 if __name__=="__main__":
     main()
