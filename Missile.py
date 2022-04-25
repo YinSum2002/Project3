@@ -91,7 +91,6 @@ def main():
                 inc = random.randint(2, 7)
                 items = ["red", "green", "blue", "yellow", "white", "orange", "purple"]
                 color = random.choice(items)
-                print(ceiling)
                 Missile.add_missile(canvas, missiles, x, y, ceiling, inc, color)
             t += 1
 

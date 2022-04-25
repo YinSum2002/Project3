@@ -14,7 +14,6 @@ class SpaceShip:
         self.__active = True
         self.id = self.canvas.create_image(self.x, self.y, anchor = "s", image = self.image)
 
-
     def deactivate(self):
         self.__active = False
         self.canvas.delete(self.id)
