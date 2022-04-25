@@ -35,50 +35,45 @@ def main():
     explosions = []  # explosion list
     missiles = []  # missile list
     aliens = []  # alien list
-    counter = 0
+    amunition = Counter(canvas, 0)
 
     ship = SpaceShip(canvas)
     ship.activate()
 
-    t = 0
-
     root.bind("<Left>", lambda e: ship.shift_left())
     root.bind("<Right>", lambda e: ship.shift_right())
-    root.bind("<Up>", lambda e: Missile.add_missile(canvas, missiles, ship.x, h-ship.height, inc = 5, color = "orange"))
+    root.bind("<Up>", lambda e: Missile.add_missile(canvas, missiles, ship.x, h-ship.height, 0, inc = 5, color = "orange"))
     root.bind("<Escape>", lambda e: stop_game())
 
-    while True:
-        # Initialize the ship
+    t = 0
+    while not game_over and amunition.val>=0: #see what you can do about getting down to 0
+        if t % 100 == 0:
+            Alien.add_alien(canvas, aliens)
+        t += 1
+        for e in explosions:
+            e.next()
 
-        #print(ship.x)
+        for m in missiles:
+            m.next()
 
-        ####### Tkinter binding mouse actions
+        for a in aliens:
+            a.next()
+            for m in missiles:
+                if a.is_shot(m.x,m.y): # and a.is_active == True:
+                    amunition.increment(a.pval)  # main function, call Counter class
+                    Explosion.add_explosion(canvas, explosions, a.x, a.y, 30, color=a.color)
+                    a.deactivate()
+                    m.deactivate()
+                    break
 
+            if ship.is_shot(a.x, a.y):
+                Explosion.add_explosion(canvas, explosions, ship.x, ship.y, 50, color="rainbow")
+                amunition.increment(-10)
+                ship.deactivate()
+                a.deactivate()
+        t += 1
         root.update()  # update the graphic (redraw)
         time.sleep(0.01)  # wait 0.01 second (simulation)
-
-        if t % 50 == 0:
-
-            for e in explosions:
-                if e.is_active == True:
-                    e.next()
-
-            for m in missiles:
-                if m.is_active == True:
-                    m.next()
-
-            for a in aliens:
-                if a.is_active == True:
-                    a.next()
-                    for m in missiles:
-                        if a.y - a.height//2 < m.y < a.y + a.height//2 and a.x - a.width//2 < m.x < a.x + a.width//2:
-                            counter.increment(a.pval)  # main function, call Counter class
-                            Explosion.add_explosion(canvas, explosions, a.x, a.y, 30, color=a.color)
-                            a.deactivate()
-                if a.x - a.width//2 < ship.x < a.x + a.width//2 and a.y > ship.y:
-                    Explosion.add_explosion(canvas, explosions, ship.x, ship.y, 30, color=a.color)
-                    ship.deactivate()
-        t += 1
         #### to complete
 
 

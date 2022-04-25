@@ -36,6 +36,13 @@ class SpaceShip:
             self.x = new_pos
             print("Right", self.x)
 
+    def is_shot(self, x0, y0):
+        top = self.y - self.height
+        bottom = self.y
+        left = self.x - self.width//2
+        right = self.x + self.width//2
+        return left <= x0 and x0 <= right and top <= y0 and y0 <= bottom
+
     
 def main():
     ##### create a window and canvas
