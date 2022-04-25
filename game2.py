@@ -44,6 +44,8 @@ def main():
 
     root.bind("<Left>", lambda e: ship.shift_left())
     root.bind("<Right>", lambda e: ship.shift_right())
+    root.bind("<Up>", lambda e: Missile.add_missile(canvas, missiles, ship.x, h-ship.height, inc = 5, color = "orange"))
+    root.bind("<Escape>", lambda e: stop_game())
 
     while True:
         # Initialize the ship
@@ -56,35 +58,28 @@ def main():
         time.sleep(0.01)  # wait 0.01 second (simulation)
 
         if t % 50 == 0:
-            y = h - ship.height
-            x = ship.x #
-            ceiling = 0
-            inc = random.randint(2, 7)
-            color = "orange"
-            Missile.add_missile(canvas, missiles, x, y, ceiling, inc, color)
+
+            for e in explosions:
+                if e.is_active == True:
+                    e.next()
+
+            for m in missiles:
+                if m.is_active == True:
+                    m.next()
+
+            for a in aliens:
+                if a.is_active == True:
+                    a.next()
+                    for m in missiles:
+                        if a.y - a.height//2 < m.y < a.y + a.height//2 and a.x - a.width//2 < m.x < a.x + a.width//2:
+                            counter.increment(a.pval)  # main function, call Counter class
+                            Explosion.add_explosion(canvas, explosions, a.x, a.y, 30, color=a.color)
+                            a.deactivate()
+                if a.x - a.width//2 < ship.x < a.x + a.width//2 and a.y > ship.y:
+                    Explosion.add_explosion(canvas, explosions, ship.x, ship.y, 30, color=a.color)
+                    ship.deactivate()
         t += 1
-
-        for e in explosions:
-            if e.is_active == True:
-                e.next()
-
-        for m in missiles:
-            if m.is_active == True:
-                m.next()
-
-        for a in aliens:
-            if a.is_active == True:
-                a.next()
-                for m in missiles:
-                    if a.y - a.height//2 < m.y < a.y + a.height//2 and a.x - a.width//2 < m.x < a.x + a.width//2:
-                        counter.increment(a.pval)  # main function, call Counter class
-                        Explosion.add_explosion(canvas, explosions, a.x, a.y, 30, color=a.color)
-                        a.deactivate()
-            if a.x - a.width//2 < ship.x < a.x + a.width//2 and a.y > ship.y:
-                Explosion.add_explosion(canvas, explosions, ship.x, ship.y, 30, color=a.color)
-                ship.deactivate()
-
-    #### to complete
+        #### to complete
 
 
 
