@@ -14,12 +14,12 @@ def stop_game():
     global game_over
     game_over=True
     
-def shoot(canvas, a_list, e_list, counter, x, y):
+def shoot(canvas, a_list, e_list, counter, x, y, record):
         hit = 0
         for a in a_list:
                 if a.is_active() == True:
                         if a.is_shot(x,y) == True:
-
+                                record[a.color] += 1
                                 counter.increment(a.pval) #main function, call Counter class
                                 a.deactivate()
                                 hit += 1
@@ -55,9 +55,10 @@ def main():
         aliens=[]
         #Initialize counter ammunition
         amunition=Counter(canvas,10)
-
+        record = {'blue': 0, 'red': 0, 'green': 0}
+        stats = []
         ####### Tkinter binding mouse actions
-        root.bind("<Button-1>",lambda e:shoot(canvas,aliens,booms,amunition,e.x,e.y))
+        root.bind("<Button-1>",lambda e:shoot(canvas,aliens,booms,amunition,e.x,e.y, record))
         root.bind("<Escape>",lambda e:stop_game())
 
         
@@ -69,6 +70,8 @@ def main():
         while not game_over and amunition.val > 0:
                 if t % 50 == 0:
                         Alien.add_alien(canvas, aliens)
+                if t % 100 == 0:
+                        stats.append(tuple(record.values()))
                 t += 1
                 for a in aliens:
                         a.next()  # next time step
@@ -79,6 +82,12 @@ def main():
                 time.sleep(0.01)
 
         canvas.create_text(w//2, h//2, text="GAME OVER", fill="orange", font=("Courier", 25))
+
+        print(record)
+        f1 = open("game1.txt", "w")
+        for t in stats:
+                f1.write(f'{t[0]} {t[1]} {t[2]}\n')
+        f1.close()
 
         root.mainloop() # wait until the window is closed
         
