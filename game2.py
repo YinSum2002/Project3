@@ -41,6 +41,8 @@ def main():
     missiles = []  # missile list
     aliens = []  # alien list
     amunition = Counter(canvas, 0)
+    record = {'blue': 0, 'red': 0, 'green': 0}
+    stats = []
 
     ship = SpaceShip(canvas)
     ship.activate()
@@ -55,6 +57,8 @@ def main():
     while not game_over and amunition.val>=0: #see what you can do about getting down to 0
         if t % 100 == 0:
             Alien.add_alien(canvas, aliens)
+        if t % 100 == 0:
+            stats.append(tuple(record.values()))
         t += 1
         for e in explosions:
             e.next()
@@ -67,6 +71,7 @@ def main():
             if a.is_active():
                 for m in missiles:
                     if a.is_shot(m.x,m.y): # and a.is_active == True:
+                        record[a.color] += 1
                         amunition.increment(a.pval)  # main function, call Counter class
                         Explosion.add_explosion(canvas, explosions, a.x, a.y, 30, color=a.color)
                         a.deactivate()
@@ -87,7 +92,14 @@ def main():
         time.sleep(0.01)  # wait 0.01 second (simulation)
         #### to complete
 
+
     canvas.create_text(w // 2, h // 2, text="GAME OVER", fill="orange", font=("Courier", 25))
+
+    print(record)
+    f1 = open("game2.txt","w")
+    for t in stats:
+        f1.write(f'{t[0]} {t[1]} {t[2]}\n')
+    f1.close()
 
     root.mainloop()
 

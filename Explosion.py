@@ -1,5 +1,6 @@
 from tkinter import *
 import math,time,random
+import numpy as np
 from Dot import Dot
 
 
@@ -7,7 +8,7 @@ class Explosion:
     def __init__(self, canvas, max_radius = 80, color = "rainbow"):
         self.dots = 15
         self.dotlist = []
-        self.__active = False
+        self._active = False
         self.canvas = canvas
         self.max_radius = max_radius
         self.color = color
@@ -16,13 +17,13 @@ class Explosion:
         self.x = x
         self.y = y
         self.r = 0
-        self.__active = True
+        self._active = True
 
     def is_active(self):
-        return self.__active
+        return self._active
 
     def next(self):
-        if self.__active == True:
+        if self.is_active() == True:
             if self.r < self.max_radius:
                 self.r += 1
 
@@ -37,7 +38,7 @@ class Explosion:
                 self.deactivate()
 
     def deactivate(self):
-        self.__active = False
+        self._active = False
         for dot in self.dotlist:
             self.canvas.delete(dot.id)
         self.dotlist = []
@@ -50,14 +51,34 @@ class Explosion:
                 del epl_list[i]
             i -= 1
 
-        explosion = Explosion(canvas, max_rad, color)
+        choice = random.randint(1,2)
+        if choice == 1:
+            explosion = Explosion(canvas, max_rad, color)
+        else:
+            explosion = Explosion_gravity(canvas, max_radius = 80, color = "rainbow")
         explosion.activate(x, y)
         epl_list.append(explosion)
         return explosion
 
+class Explosion_gravity(Explosion):
+    def __init__(self, canvas, max_radius = 80, color = "rainbow"):
+        super().__init__(canvas, max_radius = 80, color="rainbow")
+        self.angle = np.random.randint(0,359, size=self.dots)
+        self.v = np.random.randint(1,5, size=self.dots)
 
-
-
+    def next(self):
+        if self.is_active() == True:
+            if self.r < self.max_radius:
+                self.r += 1
+                g = -0.06
+                for i in range(self.dots):
+                    theta = math.pi * self.angle[i]/180
+                    x = self.x + self.r * math.cos(theta) * self.v[i]
+                    y = self.y + self.r * math.sin(theta) * self.v[i] - (g/2) * self.r**2
+                    dot = Dot(self.canvas, x, y, self.color)
+                    self.dotlist.append(dot)
+            else:
+                self.deactivate()
 
 
 

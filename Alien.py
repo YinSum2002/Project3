@@ -19,7 +19,7 @@ class Alien:
         left = x - self.width // 2
         right = x + self.width // 2
         bottom = self.y + self.height // 2
-        top = self.y  - self.height // 2
+        top = self.y - self.height // 2
         self._active = True
         self.id = self.canvas.create_rectangle(left, bottom, right, top, fill = self.color, outline = self.color)
 
@@ -157,9 +157,9 @@ def main():
         
 
         #Initialize alien
-        #alien=Alien(canvas)
+        alien=Alien(canvas)
         #alien=Alien_red(canvas)
-        alien=Alien_green(canvas)
+        #alien=Alien_green(canvas)
         #alien=Alien_blue(canvas)
 
         alien.activate()

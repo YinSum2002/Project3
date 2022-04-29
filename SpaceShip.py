@@ -28,7 +28,7 @@ class SpaceShip:
                 new_pos = self.width//2
             self.canvas.move(self.id, new_pos - self.x, 0)
             self.x = new_pos
-            print("Left", self.x)
+            #print("Left", self.x)
 
     def shift_right(self):
         if self.__active == True:
@@ -37,7 +37,7 @@ class SpaceShip:
                 new_pos = self.canvas.winfo_width() - self.width//2
             self.canvas.move(self.id, new_pos - self.x, 0)
             self.x = new_pos
-            print("Right", self.x)
+            #print("Right", self.x)
 
     def is_shot(self, x0, y0):
         top = self.y - self.height
